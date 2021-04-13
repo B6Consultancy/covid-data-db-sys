@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="statewise-covid-data-implFlow" doc:id="bc477977-6924-446c-8519-4046d50b8b88" >
+		<choice doc:name="Choice" doc:id="5d6f8da6-3361-4f7e-ae92-7616df8647e2" >
+			<when expression='#[attributes.uriParams.countryCode == "USA"]'>
+				<flow-ref doc:name="Flow Reference to usa-covid-data-impl" doc:id="3eeec44c-652a-4801-8672-819fd35b4309" name="usa-covid-data-impl"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Set Default Message" doc:id="e4104847-0f1c-40a0-98e8-b6ef9af1f45e" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Currently supported for USA Only."
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+400]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="usa-covid-data-impl" doc:id="e2951398-a371-4f33-ab2a-44ec9efe40e3" >
+		<db:bulk-insert doc:name="Bulk insert" doc:id="2bf61865-a39f-4978-b00a-dae638e54ef5" config-ref="Database_Config">
+			<db:bulk-input-parameters ><![CDATA[#[output application/java --- payload]]]></db:bulk-input-parameters>
+			<db:sql ><![CDATA[INSERT INTO USStatewiseCovidData(dateRep,county,state,fips,cases,deaths) values (:date,:county,:state,:fips,:cases,:deaths)]]></db:sql>
+		</db:bulk-insert>
+		<logger level="INFO" doc:name="Logger" doc:id="8da4d77c-490a-423b-81c2-bf1e2d7b77cd" />
+	</flow>
+</mule>

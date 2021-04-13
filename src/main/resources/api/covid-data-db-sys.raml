@@ -1,0 +1,36 @@
+#%RAML 1.0
+title: covid-data-db-sys
+
+types:
+  countrywiseRequest: !include datatypes/countrywiseCovidDataRequest.raml
+  statewiseRequest: !include datatypes/statewiseCovidDataRequest.raml
+
+/country:
+  post:
+    body:
+      application/json:
+        type: countrywiseRequest
+        example: !include examples/countrywiseCovidRequestData.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Data inserted successfully"
+              }
+  /{countryCode}:
+    post:
+      body:
+        application/json:
+          type: statewiseRequest
+          example: !include examples/stateWiseCovidData.json
+      responses:
+        201:
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Data inserted successfully"
+                }
+          
