@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
     <http:listener-config name="covid-data-db-sys-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
@@ -124,9 +124,12 @@ output application/json
         </error-handler>
     </flow>
     <flow name="post:\country:application\json:covid-data-db-sys-config">
-		<flow-ref doc:name="Flow Reference to countrywise-covid-data-implFlow" doc:id="89331964-8172-4075-9fe2-e3d77deb941c" name="countrywise-covid-data-implFlow"/>
+        <flow-ref doc:name="Flow Reference to countrywise-covid-data-implFlow" doc:id="89331964-8172-4075-9fe2-e3d77deb941c" name="countrywise-covid-data-implFlow" />
     </flow>
     <flow name="post:\country\(countryCode):application\json:covid-data-db-sys-config">
-		<flow-ref doc:name="Flow Reference to statewise-covid-data-implFlow" doc:id="63b87baa-b8b2-436c-85b3-3fe9d46ccb33" name="statewise-covid-data-implFlow"/>
+        <flow-ref doc:name="Flow Reference to statewise-covid-data-implFlow" doc:id="63b87baa-b8b2-436c-85b3-3fe9d46ccb33" name="statewise-covid-data-implFlow" />
+    </flow>
+    <flow name="post:\jobLogs:application\json:covid-data-db-sys-config">
+		<flow-ref doc:name="Flow Reference " doc:id="c48bf0e2-fd63-407c-99b5-9061a2b94a44" name="job-logs-implFlow"/>
     </flow>
 </mule>

@@ -1,0 +1,7 @@
+{
+  "jobDate": "2015-05-23",
+	"processTime" : "12:30:00",
+	"totalRecord" : 23,
+	"failedRecord" : 2,
+	"jobName" :  "CountryWise COVID data"
+}

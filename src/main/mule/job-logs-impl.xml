@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="job-logs-implFlow" doc:id="e086ad77-ff97-4d94-b9bd-626ac269242b" >
+		<db:insert doc:name="Insert" doc:id="13bcdb16-e6e2-4e47-913d-38f10f1e17e5" config-ref="Database_Config">
+			<db:sql ><![CDATA[Insert into jobLogs (jobDate, processTime, totalRecord, failedRecord, jobName) values (   :jobDate,:processTime,:totalRecord,:failedRecord,:jobName)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[output application/java --- payload]]]></db:input-parameters>
+		</db:insert>
+		<logger level="INFO" doc:name="Logger" doc:id="7d84eb69-bdc2-4cb7-806c-3c82e1e0bade" />
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="5d851a52-981e-4c28-a56a-c49a950cc4fd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Data Inserted Successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
